@@ -1,0 +1,20 @@
+{
+  "name": "htmlhint-server",
+  "version": "0.2.0",
+  "description": "HtmlHint Linter Server",
+  "engines": {
+    "node": "*"
+  },
+  "private": true,
+  "dependencies": {
+    "htmlhint": "^0.9.12",
+    "vscode-languageserver": "0.10.x"
+  },
+  "devDependencies": {
+    "typescript": "^1.6.2"
+  },
+  "scripts": {
+    "compile": "installServerIntoExtension ../htmlhint ./package.json ./src/tsconfig.json && tsc -p ./src",
+    "watch": "installServerIntoExtension ../htmlhint ./package.json ./src/tsconfig.json && tsc --watch -p ./src"
+  }
+}

@@ -1,0 +1,62 @@
+{
+	"name": "HTMLHint",
+	"displayName": "HTMLHint",
+	"description": "HTMLHint - A Static Code Analysis Tool for HTML",
+	"icon": "HTMLHint.svg",
+	"version": "0.0.1",
+	"publisher": "mkaufman",
+	"galleryBanner": {
+        "color": "#0000FF",
+        "theme": "dark"
+    },
+    "license": "SEE LICENSE IN LICENSE.md",
+	  "bugs": {
+        "url": "https://github.com/Microsoft/vscode-htmlhint/issues",
+        "email": "mkaufman@microsoft.com"
+    },
+	"homepage": "https://github.com/Microsoft/vscode-htmlhint/master/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-htmlhint.git"
+	},
+	"categories": [
+		"Languages",
+		"Linters"
+	],
+	"engines": {
+		"vscode": "0.10.x"
+	},
+	"activationEvents": [
+		"onLanguage:html"
+	],
+	"main": "./out/extension",
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "HTML-Hint configuration",
+			"properties": {
+				"htmlhint.enable": {
+					"type": "boolean",
+					"default": true,
+					"description": "Control whether htmlhint is enabled for HTML files or not."
+				},
+				"htmlhint.options": {
+					"type": "object",
+					"default": {},
+					"description": "The htmlhint options object to provide args to the htmlhint command."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+		"compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
+	},
+	"devDependencies": {
+		"vscode": "0.10.x",
+		"typescript": "^1.6.2"
+	},
+	"dependencies": {
+		"vscode-languageclient": "0.10.x"
+	}
+}
