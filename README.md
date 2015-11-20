@@ -1,4 +1,4 @@
-# vscode-eslint
+# vscode-htmlhint
 VSCode extension to support HTML-Hint, an HTML linter. 
 
 ## Development setup
