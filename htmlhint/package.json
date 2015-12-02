@@ -14,7 +14,7 @@
         "url": "https://github.com/Microsoft/vscode-htmlhint/issues",
         "email": "mkaufman@microsoft.com"
     },
-	"homepage": "https://github.com/Microsoft/vscode-htmlhint/master/README.md",
+	"homepage": "https://github.com/Microsoft/vscode-htmlhint/blob/master/README.md",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Microsoft/vscode-htmlhint.git"
