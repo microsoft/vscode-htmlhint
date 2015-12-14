@@ -7,32 +7,34 @@
 /// <reference path="typings/htmlhint/htmlhint.d.ts" />
 
 import * as path from 'path';
-
 import * as server from 'vscode-languageserver';
-
 import htmlhint = require('htmlhint');
+import fs = require('fs');
+let stripJsonComments: any = require('strip-json-comments');
 
 interface Settings {
     htmlhint: {
         enable: boolean;
-        rulesDirectory: string;
-        formatterDirectory: string
+        options: any;
     }
+    [key: string]: any;
 }
 
 let settings: Settings = null;
-let rulesDirectory: string = null;
-let formatterDirectory: string = null;
 let linter: any = null;
 
-let configCache = {
-    filePath: <string>null,
-    configuration: <any>null
-}
+/**
+ * This variable is used to cache loaded htmlhintrc objects.  It is a dictionary from path -> config object.
+ * A value of null means a .htmlhintrc object didn't exist at the given path.
+ * A value of undefined means the file at this path hasn't been loaded yet, or should be reloaded because it changed
+ */
+let htmlhintrcOptions: any = {};
 
+/**
+ * Given an htmlhint Error object, approximate the text range highlight
+ */
 function getRange(error: htmlhint.Error, lines: string[]): any {
 
-    // approximate way to find the range of the element where the error is being reported.
     let line = lines[error.line - 1];
     var isWhitespace = false;
     var curr = error.col;
@@ -58,6 +60,9 @@ function getRange(error: htmlhint.Error, lines: string[]): any {
     };
 }
 
+/**
+ * Given an htmlhint.Error type return a VS Code server Diagnostic object
+ */
 function makeDiagnostic(problem: htmlhint.Error, lines: string[]): server.Diagnostic {
 
     return {
@@ -68,26 +73,70 @@ function makeDiagnostic(problem: htmlhint.Error, lines: string[]): server.Diagno
     };
 }
 
+/**
+ * Get the html-hint configuration settings for the given html file.  This method will take care of whether to use
+ * VS Code settings, or to use a .htmlhintrc file.
+ */
 function getConfiguration(filePath: string): any {
-    // TODO
-    return {};
-	/*
-	if (configCache.configuration && configCache.filePath === filePath) {
-		return configCache.configuration;
-	}
-	configCache = {
-		filePath: filePath,
-		configuration: linter.findConfiguration(null, filePath)
-	}
-	return configCache.configuration;
-	*/
+    var options: any;
+    if (settings.htmlhint && settings.htmlhint.options && Object.keys(settings.htmlhint.options).length > 0) {
+        options = settings.htmlhint.options;
+    }
+    else {
+        options = findConfigForHtmlFile(filePath);
+    }
+
+    options = options || {};
+    return options;
 }
 
-function flushConfigCache() {
-    configCache = {
-        filePath: null,
-        configuration: null
+/**
+ * Given the path of an html file, this function will look in current directory & parent directories
+ * to find a .htmlhintrc file to use as the linter configuration.  The settings are
+ */
+function findConfigForHtmlFile(base: string) {
+    var options: any;
+
+    if (fs.existsSync(base)) {
+
+        // find default config file in parent directory
+        if (fs.statSync(base).isDirectory() === false) {
+            base = path.dirname(base);
+        }
+
+        while (base && !options) {
+            var tmpConfigFile = path.resolve(base + path.sep, '.htmlhintrc');
+
+            // undefined means we haven't tried to load the config file at this path, so try to load it.
+            if (htmlhintrcOptions[tmpConfigFile] === undefined) {
+                htmlhintrcOptions[tmpConfigFile] = loadConfigurationFile(tmpConfigFile);
+            }
+
+            // defined, non-null value means we found a config file at the given path, so use it.
+            if (htmlhintrcOptions[tmpConfigFile]) {
+                options = htmlhintrcOptions[tmpConfigFile];
+                break;
+            }
+
+            base = base.substring(0, base.lastIndexOf(path.sep));
+        }
     }
+    return options;
+}
+
+/**
+ * Given a path to a .htmlhintrc file, load it into a javascript object and return it.
+ */
+function loadConfigurationFile(configFile): any {
+    var ruleset: any = null;
+    if (fs.existsSync(configFile)) {
+        var config = fs.readFileSync(configFile, 'utf-8');
+        try {
+            ruleset = JSON.parse(stripJsonComments(config));
+        }
+        catch (e) { }
+    }
+    return ruleset;
 }
 
 function getErrorMessage(err: any, document: server.ITextDocument): string {
@@ -138,10 +187,9 @@ function doValidate(connection: server.IConnection, document: server.ITextDocume
         let contents = document.getText();
         let lines = contents.split('\n');
 
-        // TODO
-        //options.configuration = getConfiguration(fsPath);
+        let config = getConfiguration(fsPath);
 
-        let errors: htmlhint.Error[] = linter.verify(contents);
+        let errors: htmlhint.Error[] = linter.verify(contents, config);
 
         let diagnostics: server.Diagnostic[] = [];
         if (errors.length > 0) {
@@ -168,19 +216,17 @@ documents.onDidChangeContent((event) => {
 
 // The VS Code htmlhint settings have changed. Revalidate all documents.
 connection.onDidChangeConfiguration((params) => {
-    flushConfigCache();
     settings = params.settings;
 
-    if (settings.htmlhint) {
-        rulesDirectory = settings.htmlhint.rulesDirectory;
-        formatterDirectory = settings.htmlhint.formatterDirectory;
-    }
+
     validateAllTextDocuments(connection, documents.all());
 });
 
-// The watched htmlhint.json has changed. Revalidate all documents.
+// The watched .htmlhintrc has changed. Clear out the last loaded config, and revalidate all documents.
 connection.onDidChangeWatchedFiles((params) => {
-    flushConfigCache();
+    for (var i = 0; i < params.changes.length; i++) {
+        htmlhintrcOptions[server.Files.uriToFilePath(params.changes[i].uri)] = undefined;
+    }
     validateAllTextDocuments(connection, documents.all());
 });
 

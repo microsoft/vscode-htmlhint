@@ -1,9 +1,9 @@
 {
 	"name": "HTMLHint",
 	"displayName": "HTMLHint",
-	"description": "HTMLHint - A Static Code Analysis Tool for HTML",
+	"description": "VS Code integration for HTMLHint - A Static Code Analysis Tool for HTML",
 	"icon": "HTMLHint.svg",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"publisher": "mkaufman",
 	"galleryBanner": {
         "color": "#0000FF",

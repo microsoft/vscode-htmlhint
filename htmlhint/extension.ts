@@ -17,7 +17,7 @@ export function activate(context: ExtensionContext) {
         documentSelector: ['html', 'htm'],
         synchronize: {
             configurationSection: 'htmlhint',
-            fileEvents: workspace.createFileSystemWatcher('**/httmlhint.json')
+            fileEvents: workspace.createFileSystemWatcher('**/.htmlhintrc')
         }
     }
 
