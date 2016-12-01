@@ -8,7 +8,7 @@
   "private": true,
   "dependencies": {
     "fs": "0.0.2",
-    "htmlhint": "^0.9.12",
+    "htmlhint": "latest",
     "strip-json-comments": "^2.0.0",
     "vscode-languageserver": "0.10.x"
   },
