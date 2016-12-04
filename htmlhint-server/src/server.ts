@@ -139,7 +139,7 @@ function loadConfigurationFile(configFile): any {
     return ruleset;
 }
 
-function getErrorMessage(err: any, document: server.ITextDocument): string {
+function getErrorMessage(err: any, document: server.TextDocument): string {
     let result: string = null;
     if (typeof err.message === 'string' || err.message instanceof String) {
         result = <string>err.message;
@@ -149,7 +149,7 @@ function getErrorMessage(err: any, document: server.ITextDocument): string {
     return result;
 }
 
-function validateAllTextDocuments(connection: server.IConnection, documents: server.ITextDocument[]): void {
+function validateAllTextDocuments(connection: server.IConnection, documents: server.TextDocument[]): void {
     let tracker = new server.ErrorMessageTracker();
     documents.forEach(document => {
         try {
@@ -161,7 +161,7 @@ function validateAllTextDocuments(connection: server.IConnection, documents: ser
     tracker.sendErrors(connection);
 }
 
-function validateTextDocument(connection: server.IConnection, document: server.ITextDocument): void {
+function validateTextDocument(connection: server.IConnection, document: server.TextDocument): void {
     try {
         doValidate(connection, document);
     } catch (err) {
@@ -180,7 +180,7 @@ connection.onInitialize((params): server.InitializeResult => {
 });
 
 
-function doValidate(connection: server.IConnection, document: server.ITextDocument): void {
+function doValidate(connection: server.IConnection, document: server.TextDocument): void {
     try {
         let uri = document.uri;
         let fsPath = server.Files.uriToFilePath(uri);
