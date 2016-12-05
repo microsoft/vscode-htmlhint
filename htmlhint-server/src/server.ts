@@ -144,7 +144,7 @@ function getErrorMessage(err: any, document: server.TextDocument): string {
     if (typeof err.message === 'string' || err.message instanceof String) {
         result = <string>err.message;
     } else {
-        result = `An unknown error occured while validating file: ${server.Files.uriToFilePath(document.uri) }`;
+        result = `An unknown error occured while validating file: ${server.Files.uriToFilePath(document.uri)}`;
     }
     return result;
 }
@@ -173,12 +173,32 @@ let connection: server.IConnection = server.createConnection(process.stdin, proc
 let documents: server.TextDocuments = new server.TextDocuments();
 documents.listen(connection);
 
-connection.onInitialize((params): server.InitializeResult => {
-    linter = htmlhint.HTMLHint;
-    let result: server.InitializeResult = { capabilities: { textDocumentSync: documents.syncKind } };
-    return result;
-});
+function trace(message: string, verbose?: string): void {
+    connection.tracer.log(message, verbose);
+}
 
+connection.onInitialize((params): Thenable<server.InitializeResult | server.ResponseError<server.InitializeError>> => {
+    let rootFolder = params.rootPath;
+    let initOptions: {
+        nodePath: string;
+    } = params.initializationOptions;
+    let nodePath = initOptions ? (initOptions.nodePath ? initOptions.nodePath : undefined) : undefined;
+
+    return server.Files.resolveModule2(rootFolder, 'htmlhint', nodePath, trace).
+        then((value): server.InitializeResult | server.ResponseError<server.InitializeError> => {
+            linter = value.HTMLHint;
+            //connection.window.showInformationMessage(`onInitialize() - found local htmlhint (version ! ${value.HTMLHint.version})`);
+
+            let result: server.InitializeResult = { capabilities: { textDocumentSync: documents.syncKind } };
+            return result;
+        }, (error) => {
+            // didn't find htmlhint in project or global, so use embedded version.
+            linter = htmlhint.HTMLHint;
+            //connection.window.showInformationMessage(`onInitialize() using embedded htmlhint(version ! ${linter.version})`);
+            let result: server.InitializeResult = { capabilities: { textDocumentSync: documents.syncKind } };
+            return result;
+        });
+});
 
 function doValidate(connection: server.IConnection, document: server.TextDocument): void {
     try {
