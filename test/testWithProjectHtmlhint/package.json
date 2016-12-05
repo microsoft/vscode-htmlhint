@@ -1,0 +1,14 @@
+{
+  "name": "test-with-project-htmlhint",
+  "version": "0.3.0",
+  "description": "test project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "htmlhint": "0.9.10"
+  }
+}
