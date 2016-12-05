@@ -6,7 +6,10 @@ Integrates the [HTMLHnt](https://github.com/yaniswang/HTMLHint) static analysis 
 
 ## Configuration
 
-The HTMLHint extension uses a bundled version of HTMLHint so no further configuration is required besides installing the extension.
+The HTMLHint extension will attempt to use the locally installed HTMLHint module (the project-specific module if present, or a globally installed HTMLHint module).  If a
+locally installed HTMLHint isn't available, the extension will use the embedded version (current version 0.9.13).
+
+To install a version to the local project folder, run `npm install --save-dev HTMLHint`.  To install a global version on the current machine, run `npm install --global HTMLHint`.
 
 ## Usage
 
