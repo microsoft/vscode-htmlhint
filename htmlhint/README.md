@@ -2,7 +2,7 @@
 
 Integrates the [HTMLHnt](https://github.com/yaniswang/HTMLHint) static analysis tool into Visual Studio Code.
 
-![hero](hero.png)
+![hero](images/hero.png)
 
 ## Configuration
 
@@ -12,11 +12,11 @@ The HTMLHint extension uses a bundled version of HTMLHint so no further configur
 
 The HTMLHint extension will run HTMLHint on your open HTML files and report the number of errors on the Status Bar with details in the Problems panel (**View** > **Problems**).
 
-![status bar](status-bar.png)
+![status bar](images/status-bar.png)
 
 Errors in HTML files are highlighted with squiggles and you can hover over the squiggles to see the error message.
 
-![hover](hover.png)
+![hover](images/hover.png)
 
 >**Note:** HTMLHint will only analyze open HTML files and does not recurse through your project folder.
 
