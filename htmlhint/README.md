@@ -47,12 +47,14 @@ You can learn more about rule configuration at the HTMLHint [Usage page](https:/
 
 ## Settings
 
-The HTMLHint extension provides two settings:
+The HTMLHint extension provides two [settings](https://code.visualstudio.com/docs/customization/userandworkspace):
 
 * `htmlhint.enable` - disable the HTMLHint extension globally or per workspace.
-* `htmlhint.options` - provide rule set to override on disk `.htmlhintrc` or HTMLHint defaults.
+* `htmlhint.options` - provide a rule set to override on disk `.htmlhintrc` or HTMLHint defaults.
 
-For example:
+You can change settings globally (**File** > **Preferences** > **User Settings**) or per workspace (**File** > **Preferences** > **Workspace Settings**). The **Preferences** menu is under **Code** on macOS.
+
+Here's an example using the `htmlhint.options` setting:
 
 ```json
 "htmlhint.options": {
