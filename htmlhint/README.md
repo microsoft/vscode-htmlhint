@@ -50,4 +50,15 @@ You can learn more about rule configuration at the HTMLHint [Usage page](https:/
 The HTMLHint extension provides two settings:
 
 * `htmlhint.enable` - disable the HTMLHint extension globally or per workspace.
-* `htmlhint.options` - provide extra arguments to the HTMLHint command.
+* `htmlhint.options` - provide rule set to override on disk `.htmlhintrc` or HTMLHint defaults.
+
+For example:
+
+```json
+"htmlhint.options": {
+    "tagname-lowercase": false,
+    "attr-lowercase": true,
+    "attr-value-double-quotes":  true,
+    "doctype-first": true
+}
+```
