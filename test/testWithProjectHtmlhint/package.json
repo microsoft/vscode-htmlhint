@@ -9,6 +9,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "htmlhint": "0.9.5"
+    "htmlhint": "0.9.10"
   }
 }
