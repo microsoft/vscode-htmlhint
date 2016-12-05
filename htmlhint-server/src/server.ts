@@ -130,7 +130,7 @@ function findConfigForHtmlFile(base: string) {
 function loadConfigurationFile(configFile): any {
     var ruleset: any = null;
     if (fs.existsSync(configFile)) {
-        var config = fs.readFileSync(configFile, 'utf-8');
+        var config = fs.readFileSync(configFile, 'utf8');
         try {
             ruleset = JSON.parse(stripJsonComments(config));
         }
