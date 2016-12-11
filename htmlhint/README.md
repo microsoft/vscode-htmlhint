@@ -1,13 +1,12 @@
 # vscode-htmlhint
 
-Integrates the [HTMLHnt](https://github.com/yaniswang/HTMLHint) static analysis tool into Visual Studio Code.
+Integrates the [HTMLHint](https://github.com/yaniswang/HTMLHint) static analysis tool into Visual Studio Code.
 
 ![hero](images/hero.png)
 
 ## Configuration
 
-The HTMLHint extension will attempt to use the locally installed HTMLHint module (the project-specific module if present, or a globally installed HTMLHint module).  If a
-locally installed HTMLHint isn't available, the extension will use the embedded version (current version 0.9.13).
+The HTMLHint extension will attempt to use the locally installed HTMLHint module (the project-specific module if present, or a globally installed HTMLHint module).  If a locally installed HTMLHint isn't available, the extension will use the embedded version (current version 0.9.13).
 
 To install a version to the local project folder, run `npm install --save-dev HTMLHint`.  To install a global version on the current machine, run `npm install --global HTMLHint`.
 
@@ -21,7 +20,7 @@ Errors in HTML files are highlighted with squiggles and you can hover over the s
 
 ![hover](images/hover.png)
 
->**Note:** HTMLHint will only analyze open HTML files and does not recurse through your project folder.
+>**Note:** HTMLHint will only analyze open HTML files and does not search for HTML files in your project folder.
 
 ## Rules
 
