@@ -1,6 +1,6 @@
 {
   "name": "htmlhint-server",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "HtmlHint Linter Server",
   "engines": {
     "node": "*"
@@ -8,15 +8,16 @@
   "private": true,
   "dependencies": {
     "fs": "0.0.2",
-    "htmlhint": "latest",
+    "htmlhint": "^0.9.13",
     "strip-json-comments": "^2.0.0",
-    "vscode-languageserver": "0.10.x"
+    "vscode-languageserver": "^2.5.0"
   },
   "devDependencies": {
-    "typescript": "^1.6.2"
+    "@types/node": "^6.0.51",
+    "typescript": "^2.0.10"
   },
   "scripts": {
-    "compile": "installServerIntoExtension ../htmlhint ./package.json ./src/tsconfig.json && tsc -p ./src",
-    "watch": "installServerIntoExtension ../htmlhint ./package.json ./src/tsconfig.json && tsc --watch -p ./src"
+    "compile": "installServerIntoExtension ../htmlhint ./package.json ./src/tsconfig.json && node node_modules/typescript/bin/tsc -p ./src",
+    "watch": "installServerIntoExtension ../htmlhint ./package.json ./src/tsconfig.json && node node_modules/typescript/bin/tsc --watch -p ./src"
   }
 }
