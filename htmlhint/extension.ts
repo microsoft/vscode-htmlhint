@@ -14,7 +14,7 @@ export function activate(context: ExtensionContext) {
     };
 
     let clientOptions: LanguageClientOptions = {
-        documentSelector: ['html', 'htm'],
+        documentSelector: ['html', 'htm', 'twig'],
         synchronize: {
             configurationSection: 'htmlhint',
             fileEvents: workspace.createFileSystemWatcher('**/.htmlhintrc')
