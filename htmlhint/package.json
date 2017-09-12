@@ -42,7 +42,7 @@
         },
         "htmlhint.extensions": {
           "type": "array",
-          "default": ["html", "html"],
+          "default": ["html", "htm"],
           "description": "The file extensions to be linted."
         },
         "htmlhint.options": {
