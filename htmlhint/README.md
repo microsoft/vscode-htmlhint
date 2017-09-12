@@ -49,16 +49,23 @@ You can learn more about rule configuration at the HTMLHint [Usage page](https:/
 
 ## Settings
 
-The HTMLHint extension provides two [settings](https://code.visualstudio.com/docs/customization/userandworkspace):
+The HTMLHint extension provides three [settings](https://code.visualstudio.com/docs/customization/userandworkspace):
 
 * `htmlhint.enable` - disable the HTMLHint extension globally or per workspace.
+* `htmlhint.extensions` - specify additional file extensions to be linted
 * `htmlhint.options` - provide a rule set to override on disk `.htmlhintrc` or HTMLHint defaults.
 
 You can change settings globally (**File** > **Preferences** > **User Settings**) or per workspace (**File** > **Preferences** > **Workspace Settings**). The **Preferences** menu is under **Code** on macOS.
 
-Here's an example using the `htmlhint.options` setting:
+Here's an example using the `htmlhint.extensions` and `htmlhint.options` settings:
 
 ```json
+"htmlhint.extensions: [
+    "html",
+    "htm",
+    "twig",
+    "mustache"
+],
 "htmlhint.options": {
     "tagname-lowercase": false,
     "attr-lowercase": true,

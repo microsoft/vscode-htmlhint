@@ -40,6 +40,11 @@
           "default": true,
           "description": "Control whether htmlhint is enabled for HTML files or not."
         },
+        "htmlhint.extensions": {
+          "type": "array",
+          "default": ["html", "htm"],
+          "description": "The file extensions to be linted."
+        },
         "htmlhint.options": {
           "type": "object",
           "default": {},

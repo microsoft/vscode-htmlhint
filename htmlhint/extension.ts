@@ -13,8 +13,13 @@ export function activate(context: ExtensionContext) {
         debug: { module: serverModulePath, options: debugOptions }
     };
 
+    // Get file types to lint from user settings
+    let config = workspace.getConfiguration('htmlhint');
+    let extensions = config.get('extensions');
+    
+    // Set options
     let clientOptions: LanguageClientOptions = {
-        documentSelector: ['html', 'htm'],
+        documentSelector: extensions,
         synchronize: {
             configurationSection: 'htmlhint',
             fileEvents: workspace.createFileSystemWatcher('**/.htmlhintrc')
