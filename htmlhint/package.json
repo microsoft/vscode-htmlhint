@@ -24,7 +24,7 @@
     "Linters"
   ],
   "engines": {
-    "vscode": "^1.4.0"
+    "vscode": "^1.16.0"
   },
   "activationEvents": [
     "onLanguage:html"
@@ -40,10 +40,10 @@
           "default": true,
           "description": "Control whether htmlhint is enabled for HTML files or not."
         },
-        "htmlhint.extensions": {
+        "htmlhint.documentSelector": {
           "type": "array",
           "default": ["html", "htm"],
-          "description": "The file extensions to be linted."
+          "description": "The associated document types to be linted."
         },
         "htmlhint.options": {
           "type": "object",
@@ -55,15 +55,16 @@
   },
   "scripts": {
     "vscode:prepublish": "node ./node_modules/typescript/bin/tsc -p ./",
-    "compile": "node ./node_modules/typescript/bin/tsc -watch -p ./",
+    "compile": "node ./node_modules/typescript/bin/tsc -p ./",
+    "watch": "node ./node_modules/typescript/bin/tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
-    "@types/node": "^6.0.41",
-    "typescript": "^2.0.10",
-    "vscode": "^1.0.3"
+    "typescript": "^2.5.2",
+    "vscode": "^1.1.5",
+    "@types/node": "^6.0.41"
   },
   "dependencies": {
-    "vscode-languageclient": "^2.6.3"
+    "vscode-languageclient": "^3.4.0"
   }
 }

@@ -1,17 +1,17 @@
 {
-	"version": "0.1.0",
-	// List of configurations. Add new configurations or edit existing ones.
-	"configurations": [
-		{
-			"name": "Attach",
-			"type": "node",
-			"request": "attach",
-			// TCP/IP address. Default is "localhost".
-			"address": "localhost",
-			// Port to attach to.
-			"port": 6004,
-			"sourceMaps": true,
-			"outDir": "${workspaceRoot}/../htmlhint/server"
-		}
-	]
+    "version": "0.1.0",
+    "configurations": [
+    {
+            "name": "Attach",
+            "type": "node",
+            "request": "attach",
+            "address": "localhost",
+            "protocol": "inspector",
+            "port": 6010,
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceRoot}/../htmlhint/server/**/*.js"
+            ]
+        }
+    ]
 }
