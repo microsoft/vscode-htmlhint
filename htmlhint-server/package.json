@@ -10,11 +10,11 @@
     "fs": "0.0.2",
     "htmlhint": "^0.9.13",
     "strip-json-comments": "^2.0.0",
-    "vscode-languageserver": "^2.5.0"
+    "vscode-languageserver": "^3.4.0"
   },
   "devDependencies": {
-    "@types/node": "^6.0.51",
-    "typescript": "^2.0.10"
+    "@types/node": "^6.0.41",
+    "typescript": "^2.5.2"
   },
   "scripts": {
     "compile": "installServerIntoExtension ../htmlhint ./package.json ./src/tsconfig.json && node node_modules/typescript/bin/tsc -p ./src",

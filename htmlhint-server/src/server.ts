@@ -177,14 +177,14 @@ function trace(message: string, verbose?: string): void {
     connection.tracer.log(message, verbose);
 }
 
-connection.onInitialize((params): Thenable<server.InitializeResult | server.ResponseError<server.InitializeError>> => {
+connection.onInitialize((params: server.InitializeParams, token: server.CancellationToken) => {
     let rootFolder = params.rootPath;
     let initOptions: {
         nodePath: string;
     } = params.initializationOptions;
     let nodePath = initOptions ? (initOptions.nodePath ? initOptions.nodePath : undefined) : undefined;
 
-    return server.Files.resolveModule2(rootFolder, 'htmlhint', nodePath, trace).
+    const result=  server.Files.resolveModule2(rootFolder, 'htmlhint', nodePath, trace).
         then((value): server.InitializeResult | server.ResponseError<server.InitializeError> => {
             linter = value.HTMLHint;
             //connection.window.showInformationMessage(`onInitialize() - found local htmlhint (version ! ${value.HTMLHint.version})`);
@@ -198,6 +198,8 @@ connection.onInitialize((params): Thenable<server.InitializeResult | server.Resp
             let result: server.InitializeResult = { capabilities: { textDocumentSync: documents.syncKind } };
             return result;
         });
+
+    return result as Thenable<server.InitializeResult>;
 });
 
 function doValidate(connection: server.IConnection, document: server.TextDocument): void {

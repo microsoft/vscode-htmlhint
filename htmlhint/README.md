@@ -47,24 +47,52 @@ If you'd like to modify the rules, you can provide a `.htmlhintrc` file in the r
 
 You can learn more about rule configuration at the HTMLHint [Usage page](https://github.com/yaniswang/HTMLHint/wiki/Usage#cli).
 
+## Additional file types
+
+By default, HTMLHint will run on any files associated with the "html" language service (i.e., ".html" and ".htm" files). If you'd like to use the HTMLHint extension with additional file types, you have two options:
+
+### Option 1: Treating your file like any other html file
+
+If you would like the file type to be treated as any other html file (including syntax highlighting, as well as HTMLHint linting), you'll need to associate the extension with the html language service.  Add the following to your VS Code [settings](https://code.visualstudio.com/docs/customization/userandworkspace), replacing `"*.ext"` with your file extension.
+
+```json
+{
+  "files.associations": {
+    "*.ext": "html",
+  }
+}
+```
+
+### Option 2:  Associating HTMLHint extension with your file type
+
+If your file type already has an associated language service other than "html", and you'd like HTMLHint to process those file types, you will need to associate the HTMLHint extension with that language service. Add the following to your VS Code [settings](https://code.visualstudio.com/docs/customization/userandworkspace), replacing `"mylang"` with your language service.  For example, if you want HTMLHint to process `.twig` files, you would use `"twig"`. Note that with this configuration, **you need to open an html file first** to activate the HTMLHint extension. Otherwise, you won't see any linter errors, (the extension is hard-coded to activate when the html language service activates).
+
+```json
+{
+  "htmlhint.documentSelector": [
+    "html",
+    "mylang"
+  ]
+}
+```
+
 ## Settings
 
 The HTMLHint extension provides three [settings](https://code.visualstudio.com/docs/customization/userandworkspace):
 
 * `htmlhint.enable` - disable the HTMLHint extension globally or per workspace.
-* `htmlhint.extensions` - specify additional file extensions to be linted
+* `htmlhint.documentSelector` - specify additional language services to be linted
 * `htmlhint.options` - provide a rule set to override on disk `.htmlhintrc` or HTMLHint defaults.
 
 You can change settings globally (**File** > **Preferences** > **User Settings**) or per workspace (**File** > **Preferences** > **Workspace Settings**). The **Preferences** menu is under **Code** on macOS.
 
-Here's an example using the `htmlhint.extensions` and `htmlhint.options` settings:
+Here's an example using the `htmlhint.documentSelector` and `htmlhint.options` settings:
 
 ```json
-"htmlhint.extensions: [
+"htmlhint.documentSelector: [
     "html",
     "htm",
-    "twig",
-    "mustache"
+    "twig"
 ],
 "htmlhint.options": {
     "tagname-lowercase": false,
@@ -73,3 +101,5 @@ Here's an example using the `htmlhint.extensions` and `htmlhint.options` setting
     "doctype-first": true
 }
 ```
+
+Note that in order to have the linter apply to addi
