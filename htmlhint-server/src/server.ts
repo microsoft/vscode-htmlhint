@@ -14,6 +14,7 @@ let stripJsonComments: any = require('strip-json-comments');
 
 interface Settings {
     htmlhint: {
+        configFile: string;
         enable: boolean;
         options: any;
     }
@@ -79,14 +80,19 @@ function makeDiagnostic(problem: htmlhint.Error, lines: string[]): server.Diagno
  */
 function getConfiguration(filePath: string): any {
     var options: any;
-    if (settings.htmlhint && settings.htmlhint.options && Object.keys(settings.htmlhint.options).length > 0) {
-        options = settings.htmlhint.options;
-    }
-    else {
+
+    if (!settings.htmlhint) {
         options = findConfigForHtmlFile(filePath);
+    }
+    else if (settings.htmlhint.configFile) {
+        options = loadConfigurationFile(settings.htmlhint.configFile);
+    }
+    else if (settings.htmlhint.options && Object.keys(settings.htmlhint.options).length > 0) {
+        options = settings.htmlhint.options;
     }
 
     options = options || {};
+
     return options;
 }
 
