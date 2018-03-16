@@ -230,6 +230,12 @@ function doValidate(connection: server.IConnection, document: server.TextDocumen
     }
 }
 
+documents.onDidClose((event) => {
+	let uri = event.document.uri;
+
+	connection.sendDiagnostics({ uri: uri, diagnostics: [] });
+});
+
 // A text document has changed. Validate the document.
 documents.onDidChangeContent((event) => {
     // the contents of a text document has changed
