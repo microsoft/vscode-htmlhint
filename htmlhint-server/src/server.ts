@@ -14,6 +14,7 @@ let stripJsonComments: any = require('strip-json-comments');
 
 interface Settings {
     htmlhint: {
+        clearProblemsOnDocumentClose: boolean;
         enable: boolean;
         options: any;
     }
@@ -229,6 +230,14 @@ function doValidate(connection: server.IConnection, document: server.TextDocumen
         throw err;
     }
 }
+
+documents.onDidClose((event) => {
+  if (settings.htmlhint.clearProblemsOnDocumentClose === true) {
+	  const uri = event.document.uri;
+
+    connection.sendDiagnostics({ uri: uri, diagnostics: [] });
+  }
+});
 
 // A text document has changed. Validate the document.
 documents.onDidChangeContent((event) => {

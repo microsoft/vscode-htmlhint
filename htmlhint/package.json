@@ -35,6 +35,11 @@
       "type": "object",
       "title": "HTML-Hint configuration",
       "properties": {
+        "htmlhint.clearProblemsOnDocumentClose": {
+          "type": "boolean",
+          "default": false,
+          "description": "Clear problems (linter warnings/errors) for a document when it is closed."
+        },
         "htmlhint.enable": {
           "type": "boolean",
           "default": true,
@@ -42,7 +47,10 @@
         },
         "htmlhint.documentSelector": {
           "type": "array",
-          "default": ["html", "htm"],
+          "default": [
+            "html",
+            "htm"
+          ],
           "description": "The associated document types to be linted."
         },
         "htmlhint.options": {
