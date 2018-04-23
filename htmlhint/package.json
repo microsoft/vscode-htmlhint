@@ -3,7 +3,7 @@
   "displayName": "HTMLHint",
   "description": "VS Code integration for HTMLHint - A Static Code Analysis Tool for HTML",
   "icon": "HTMLHint.png",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "publisher": "mkaufman",
   "galleryBanner": {
     "color": "#0000FF",
@@ -42,7 +42,10 @@
         },
         "htmlhint.documentSelector": {
           "type": "array",
-          "default": ["html", "htm"],
+          "default": [
+            "html",
+            "htm"
+          ],
           "description": "The associated document types to be linted."
         },
         "htmlhint.options": {
