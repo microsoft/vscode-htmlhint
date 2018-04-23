@@ -15,11 +15,12 @@ export function activate(context: ExtensionContext) {
 
     // Get file types to lint from user settings
     let config = workspace.getConfiguration('htmlhint');
-    let extensions = config.get('documentSelector') as string[];
+    let languages: string[] = config.get('documentSelector');
+    let documentSelector = languages.map(language => ({ language, scheme: 'file' }));
 
     // Set options
     let clientOptions: LanguageClientOptions = {
-        documentSelector: extensions,
+        documentSelector,
         synchronize: {
             configurationSection: 'htmlhint',
             fileEvents: workspace.createFileSystemWatcher('**/.htmlhintrc')
