@@ -10,18 +10,23 @@ import * as path from 'path';
 import * as server from 'vscode-languageserver';
 import htmlhint = require('htmlhint');
 import fs = require('fs');
+import glob = require('glob');
+
 let stripJsonComments: any = require('strip-json-comments');
 
 interface Settings {
     htmlhint: {
         enable: boolean;
         options: any;
+        rulesDir: string;
     }
     [key: string]: any;
 }
 
 let settings: Settings = null;
 let linter: any = null;
+let rulesLoaded: boolean = false;
+let rootFolder: string = null;
 
 /**
  * This variable is used to cache loaded htmlhintrc objects.  It is a dictionary from path -> config object.
@@ -58,6 +63,74 @@ function getRange(error: htmlhint.Error, lines: string[]): any {
             character: curr
         }
     };
+}
+
+function loadRules(HTMLHint: any, force: boolean): any {
+    if (force) {
+        rulesLoaded = false;
+    }
+
+    if (rulesLoaded || htmlhint == null) {
+        return;
+    }
+    try {
+        if (!settings.htmlhint || !settings.htmlhint.rulesDir) {
+            return;
+        }
+        let rulesDir = settings.htmlhint.rulesDir;
+        let absoluteDir = '';
+        //check absolute path
+        let exists = fs.existsSync(rulesDir);
+        if (exists) {
+            absoluteDir = rulesDir;
+        } else {
+            //relative dir, find it based on workspace roots
+            absoluteDir = path.resolve(rootFolder, rulesDir);
+            exists = fs.existsSync(absoluteDir);
+        }
+
+        if (exists) {
+            //load all rules
+            loadCustomRules(absoluteDir, HTMLHint);
+        }
+    }
+    catch (e) { }
+    finally {
+        rulesLoaded = true;
+    }
+}
+
+// load custom rles
+function loadCustomRules(rulesdir:string, HTMLHint:any):any{
+    rulesdir = rulesdir.replace(/\\/g, '/');
+    if(fs.existsSync(rulesdir)){
+        if(fs.statSync(rulesdir).isDirectory()){
+            rulesdir += /\/$/.test(rulesdir)?'':'/';
+            rulesdir += '**/*.js';
+            var arrFiles = glob.sync(rulesdir, {
+                'dot': false,
+                'nodir': true,
+                'strict': false,
+                'silent': true
+            });
+            arrFiles.forEach(function(file){
+                loadRule(file, HTMLHint);
+            });
+        }
+        else{
+            loadRule(rulesdir, HTMLHint);
+        }
+    }
+}
+
+// load rule
+function loadRule(filepath: string, HTMLHint: any): any{
+    filepath = path.resolve(filepath);
+    try{
+        var module = require(filepath);
+        module(HTMLHint);
+    }
+    catch(e){}
 }
 
 /**
@@ -178,17 +251,16 @@ function trace(message: string, verbose?: string): void {
 }
 
 connection.onInitialize((params: server.InitializeParams, token: server.CancellationToken) => {
-    let rootFolder = params.rootPath;
+    rootFolder = params.rootPath;
     let initOptions: {
         nodePath: string;
     } = params.initializationOptions;
     let nodePath = initOptions ? (initOptions.nodePath ? initOptions.nodePath : undefined) : undefined;
 
-    const result=  server.Files.resolveModule2(rootFolder, 'htmlhint', nodePath, trace).
+    const result = server.Files.resolveModule2(rootFolder, 'htmlhint', nodePath, trace).
         then((value): server.InitializeResult | server.ResponseError<server.InitializeError> => {
             linter = value.HTMLHint;
-            //connection.window.showInformationMessage(`onInitialize() - found local htmlhint (version ! ${value.HTMLHint.version})`);
-
+            //connection.window.showInformationMessage(`onInitialize() using external htmlhint(version ! ${linter.version})`);
             let result: server.InitializeResult = { capabilities: { textDocumentSync: documents.syncKind } };
             return result;
         }, (error) => {
@@ -208,11 +280,9 @@ function doValidate(connection: server.IConnection, document: server.TextDocumen
         let fsPath = server.Files.uriToFilePath(uri);
         let contents = document.getText();
         let lines = contents.split('\n');
-
         let config = getConfiguration(fsPath);
 
         let errors: htmlhint.Error[] = linter.verify(contents, config);
-
         let diagnostics: server.Diagnostic[] = [];
         if (errors.length > 0) {
             errors.forEach(each => {
@@ -239,7 +309,7 @@ documents.onDidChangeContent((event) => {
 // The VS Code htmlhint settings have changed. Revalidate all documents.
 connection.onDidChangeConfiguration((params) => {
     settings = params.settings;
-
+    loadRules(linter, true);
 
     validateAllTextDocuments(connection, documents.all());
 });

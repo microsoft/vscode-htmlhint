@@ -10,7 +10,8 @@
     "fs": "0.0.2",
     "htmlhint": "^0.9.13",
     "strip-json-comments": "^2.0.0",
-    "vscode-languageserver": "^3.4.0"
+    "vscode-languageserver": "^3.4.0",
+    "glob": "5.0.15"
   },
   "devDependencies": {
     "@types/node": "^6.0.41",

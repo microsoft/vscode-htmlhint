@@ -3,7 +3,7 @@
   "displayName": "HTMLHint",
   "description": "VS Code integration for HTMLHint - A Static Code Analysis Tool for HTML",
   "icon": "HTMLHint.png",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "publisher": "mkaufman",
   "galleryBanner": {
     "color": "#0000FF",
@@ -39,6 +39,11 @@
           "type": "boolean",
           "default": true,
           "description": "Control whether htmlhint is enabled for HTML files or not."
+        },
+        "htmlhint.rulesDir": {
+          "type": "string",
+          "default": "",
+          "description": "Folder containing custom rules, absolute or relative to workspace root."
         },
         "htmlhint.documentSelector": {
           "type": "array",
