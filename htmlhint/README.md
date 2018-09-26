@@ -1,6 +1,6 @@
 # vscode-htmlhint
 
-Integrates the [HTMLHint](https://github.com/yaniswang/HTMLHint) static analysis tool into Visual Studio Code.
+Integrates the [HTMLHint](https://github.com/htmlhint/HTMLHint) static analysis tool into Visual Studio Code.
 
 ![hero](images/hero.png)
 
@@ -24,7 +24,7 @@ Errors in HTML files are highlighted with squiggles and you can hover over the s
 
 ## Rules
 
-The HTMLHint extension uses the default [rules](https://github.com/yaniswang/HTMLHint/wiki/Usage#about-rules) provided by HTMLHint.
+The HTMLHint extension uses the default [rules](https://github.com/htmlhint/HTMLHint/wiki/Usage#about-rules) provided by HTMLHint.
 
 ```json
 {
@@ -45,7 +45,7 @@ The HTMLHint extension uses the default [rules](https://github.com/yaniswang/HTM
 
 If you'd like to modify the rules, you can provide a `.htmlhintrc` file in the root of your project folder with a reduced ruleset or modified values.
 
-You can learn more about rule configuration at the HTMLHint [Usage page](https://github.com/yaniswang/HTMLHint/wiki/Usage#cli).
+You can learn more about rule configuration at the HTMLHint [Usage page](https://github.com/htmlhint/HTMLHint/wiki/Usage#cli).
 
 ## Additional file types
 
