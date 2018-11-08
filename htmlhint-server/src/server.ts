@@ -65,43 +65,34 @@ function getRange(error: htmlhint.Error, lines: string[]): any {
     };
 }
 
-function loadRules(HTMLHint: any, force: boolean): any {
-    if (force) {
-        rulesLoaded = false;
-    }
+function loadRules(): any {
+    rulesLoaded = false;
+    if (linter == null || !settings.htmlhint || !settings.htmlhint.rulesDir) {
+		return;
+	}
+	
+	let rulesDir = settings.htmlhint.rulesDir;
+	let absoluteDir = '';
+	//check absolute path
+	let exists = fs.existsSync(rulesDir);
+	if (exists) {
+		absoluteDir = rulesDir;
+	} else {
+		//relative dir, find it based on workspace roots
+		absoluteDir = path.resolve(rootFolder, rulesDir);
+		exists = fs.existsSync(absoluteDir);
+	}
 
-    if (rulesLoaded || htmlhint == null) {
-        return;
-    }
-    try {
-        if (!settings.htmlhint || !settings.htmlhint.rulesDir) {
-            return;
-        }
-        let rulesDir = settings.htmlhint.rulesDir;
-        let absoluteDir = '';
-        //check absolute path
-        let exists = fs.existsSync(rulesDir);
-        if (exists) {
-            absoluteDir = rulesDir;
-        } else {
-            //relative dir, find it based on workspace roots
-            absoluteDir = path.resolve(rootFolder, rulesDir);
-            exists = fs.existsSync(absoluteDir);
-        }
-
-        if (exists) {
-            //load all rules
-            loadCustomRules(absoluteDir, HTMLHint);
-        }
-    }
-    catch (e) { }
-    finally {
-        rulesLoaded = true;
-    }
+	if (exists) {
+		//load all rules
+		loadCustomRules(absoluteDir);
+	}
+    rulesLoaded = true;
 }
 
+// loadCustomRules is a direct copy from ./htmlhint-server/node_modules/htmlhint/bin/htmlhint lines 139-160
 // load custom rles
-function loadCustomRules(rulesdir:string, HTMLHint:any):any{
+function loadCustomRules(rulesdir:string): any{
     rulesdir = rulesdir.replace(/\\/g, '/');
     if(fs.existsSync(rulesdir)){
         if(fs.statSync(rulesdir).isDirectory()){
@@ -114,21 +105,23 @@ function loadCustomRules(rulesdir:string, HTMLHint:any):any{
                 'silent': true
             });
             arrFiles.forEach(function(file){
-                loadRule(file, HTMLHint);
+                loadRule(file);
             });
         }
         else{
-            loadRule(rulesdir, HTMLHint);
+            loadRule(rulesdir);
         }
     }
-}
+} 
 
+// loadCustomRules is a modified copy from ./htmlhint-server/node_modules/htmlhint/bin/htmlhint lines 162-170
+// Only the variable name HTMLHint has been changed to linter
 // load rule
-function loadRule(filepath: string, HTMLHint: any): any{
+function loadRule(filepath: string): any{
     filepath = path.resolve(filepath);
     try{
         var module = require(filepath);
-        module(HTMLHint);
+        module(linter);
     }
     catch(e){}
 }
@@ -309,7 +302,7 @@ documents.onDidChangeContent((event) => {
 // The VS Code htmlhint settings have changed. Revalidate all documents.
 connection.onDidChangeConfiguration((params) => {
     settings = params.settings;
-    loadRules(linter, true);
+    loadRules();
 
     validateAllTextDocuments(connection, documents.all());
 });
