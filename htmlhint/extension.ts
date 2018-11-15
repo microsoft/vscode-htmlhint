@@ -21,6 +21,7 @@ export function activate(context: ExtensionContext) {
     // Set options
     let clientOptions: LanguageClientOptions = {
         documentSelector,
+        diagnosticCollectionName: 'htmlhint',
         synchronize: {
             configurationSection: 'htmlhint',
             fileEvents: workspace.createFileSystemWatcher('**/.htmlhintrc')
