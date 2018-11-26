@@ -5,6 +5,7 @@ declare module 'htmlhint' {
 
     export interface Verifier {
         verify(text: string): Error[];
+        loadCustomRules(rulesdir: string): any;
     }
 
     export interface Error {
