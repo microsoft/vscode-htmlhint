@@ -20,7 +20,7 @@
     "url": "https://github.com/Microsoft/vscode-htmlhint.git"
   },
   "categories": [
-    "Languages",
+    "Programming Languages",
     "Linters"
   ],
   "engines": {
