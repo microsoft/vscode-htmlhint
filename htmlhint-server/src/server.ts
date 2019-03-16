@@ -184,16 +184,16 @@ connection.onInitialize((params: server.InitializeParams, token: server.Cancella
     } = params.initializationOptions;
     let nodePath = initOptions ? (initOptions.nodePath ? initOptions.nodePath : undefined) : undefined;
 
-    const result=  server.Files.resolveModule2(rootFolder, 'htmlhint', nodePath, trace).
+    const result = server.Files.resolveModule2(rootFolder, 'htmlhint', nodePath, trace).
         then((value): server.InitializeResult | server.ResponseError<server.InitializeError> => {
-            linter = value.HTMLHint || value;
+            linter = value.default || value.HTMLHint || value;
             //connection.window.showInformationMessage(`onInitialize() - found local htmlhint (version ! ${value.HTMLHint.version})`);
 
             let result: server.InitializeResult = { capabilities: { textDocumentSync: documents.syncKind } };
             return result;
         }, (error) => {
             // didn't find htmlhint in project or global, so use embedded version.
-            linter = htmlhint.HTMLHint || htmlhint;
+            linter = htmlhint.default || htmlhint.HTMLHint || htmlhint;
             //connection.window.showInformationMessage(`onInitialize() using embedded htmlhint(version ! ${linter.version})`);
             let result: server.InitializeResult = { capabilities: { textDocumentSync: documents.syncKind } };
             return result;

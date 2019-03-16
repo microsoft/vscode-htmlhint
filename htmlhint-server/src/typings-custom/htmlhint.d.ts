@@ -2,7 +2,7 @@
 declare module 'htmlhint' {
 
     // version >= 0.11.0 es6
-    export default Verifier;
+    export default HTMLHint;
 
     // version < 0.11.0
     export var HTMLHint: Verifier|undefined;
