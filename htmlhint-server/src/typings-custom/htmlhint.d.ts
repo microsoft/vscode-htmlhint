@@ -1,7 +1,11 @@
 
 declare module 'htmlhint' {
 
-    export var HTMLHint: Verifier;
+    // version >= 0.11.0 es6
+    export default HTMLHint;
+
+    // version < 0.11.0
+    export var HTMLHint: Verifier|undefined;
 
     export interface Verifier {
         verify(text: string): Error[];
