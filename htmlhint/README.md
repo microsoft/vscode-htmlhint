@@ -78,11 +78,12 @@ If your file type already has an associated language service other than "html", 
 
 ## Settings
 
-The HTMLHint extension provides three [settings](https://code.visualstudio.com/docs/customization/userandworkspace):
+The HTMLHint extension provides these [settings](https://code.visualstudio.com/docs/customization/userandworkspace):
 
 * `htmlhint.enable` - disable the HTMLHint extension globally or per workspace.
 * `htmlhint.documentSelector` - specify additional language services to be linted
 * `htmlhint.options` - provide a rule set to override on disk `.htmlhintrc` or HTMLHint defaults.
+* `htmlhint.configFile` - specify a custom HTMLHint configuration file. Please specify either 'htmlhint.configFile' or 'htmlhint.options', but not both.
 
 You can change settings globally (**File** > **Preferences** > **User Settings**) or per workspace (**File** > **Preferences** > **Workspace Settings**). The **Preferences** menu is under **Code** on macOS.
 
