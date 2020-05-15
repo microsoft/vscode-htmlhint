@@ -14,6 +14,7 @@ let stripJsonComments: any = require('strip-json-comments');
 
 interface Settings {
     htmlhint: {
+        configFile: string;
         enable: boolean;
         options: any;
     }
@@ -79,10 +80,21 @@ function makeDiagnostic(problem: htmlhint.Error, lines: string[]): server.Diagno
  */
 function getConfiguration(filePath: string): any {
     var options: any;
-    if (settings.htmlhint && settings.htmlhint.options && Object.keys(settings.htmlhint.options).length > 0) {
-        options = settings.htmlhint.options;
-    }
-    else {
+    if (settings.htmlhint) {
+        if (settings.htmlhint.configFile && settings.htmlhint.options && Object.keys(settings.htmlhint.options).length > 0) {
+            throw new Error(`The configuration settings for HTMLHint are invalid. Please specify either 'htmlhint.configFile' or 'htmlhint.options', but not both.`);
+        }
+        if (settings.htmlhint.configFile) {
+            if (fs.existsSync(settings.htmlhint.configFile)) {
+                options = loadConfigurationFile(settings.htmlhint.configFile)
+            } else {
+                const configFileHint = !path.isAbsolute(settings.htmlhint.configFile) ? ` (resolves to '${path.resolve(settings.htmlhint.configFile)}')` : '';
+                throw new Error(`The configuration settings for HTMLHint are invalid. The file '${settings.htmlhint.configFile}'${configFileHint} specified in 'htmlhint.configFile' could not be found.`);
+            }
+        } else if (settings.htmlhint.options && Object.keys(settings.htmlhint.options).length > 0) {
+            options = settings.htmlhint.options;
+        }
+    } else {
         options = findConfigForHtmlFile(filePath);
     }
 
