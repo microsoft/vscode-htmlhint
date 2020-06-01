@@ -93,6 +93,8 @@ function getConfiguration(filePath: string): any {
             }
         } else if (settings.htmlhint.options && Object.keys(settings.htmlhint.options).length > 0) {
             options = settings.htmlhint.options;
+        } else {
+            options = findConfigForHtmlFile(filePath);
         }
     } else {
         options = findConfigForHtmlFile(filePath);
