@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { workspace, Disposable, ExtensionContext } from 'vscode';
-import { LanguageClient, LanguageClientOptions, SettingMonitor, ServerOptions } from 'vscode-languageclient';
+import { LanguageClient, LanguageClientOptions, SettingMonitor, ServerOptions, TransportKind } from 'vscode-languageclient';
 
 export function activate(context: ExtensionContext) {
 
@@ -9,8 +9,8 @@ export function activate(context: ExtensionContext) {
     let serverModulePath = path.join(__dirname, '..', 'server', 'server.js');
     let debugOptions = { execArgv: ["--nolazy", "--inspect=6010"], cwd: process.cwd() };
     let serverOptions: ServerOptions = {
-        run: { module: serverModulePath },
-        debug: { module: serverModulePath, options: debugOptions }
+        run: { module: serverModulePath, transport: TransportKind.ipc },
+        debug: { module: serverModulePath, transport: TransportKind.ipc, options: debugOptions }
     };
 
     // Get file types to lint from user settings
