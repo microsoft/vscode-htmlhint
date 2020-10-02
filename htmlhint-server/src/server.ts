@@ -183,7 +183,7 @@ function validateTextDocument(connection: server.IConnection, document: server.T
     }
 }
 
-let connection: server.IConnection = server.createConnection(process.stdin, process.stdout);
+let connection: server.IConnection = server.createConnection();
 let documents: server.TextDocuments = new server.TextDocuments();
 documents.listen(connection);
 
